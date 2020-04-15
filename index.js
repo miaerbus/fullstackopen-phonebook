@@ -2,6 +2,7 @@ const express = require('express')
 const morgan = require('morgan')
 const app = express()
 const cors = require('cors')
+const Person = require('./models/person')
 
 app.use(cors())
 
@@ -17,39 +18,6 @@ app.use(logger)
 
 app.use(express.static('build'))
 
-let persons = [
-  {
-    name: 'Arto Hellas',
-    number: '040-123456',
-    id: 1,
-  },
-  {
-    name: 'Ada Lovelace',
-    number: '39-44-5323523',
-    id: 2,
-  },
-  {
-    id: 3,
-    name: 'Dan Abramov',
-    number: '123',
-  },
-  {
-    name: 'Mary Poppendieck',
-    number: '39-23-6423122',
-    id: 4,
-  },
-  {
-    name: 'Mia',
-    number: '423542',
-    id: 7,
-  },
-  {
-    name: 'Klara',
-    number: '45632',
-    id: 8,
-  },
-]
-
 app.get('/info', (req, res) => {
   const date = new Date()
   res.send(
@@ -57,8 +25,10 @@ app.get('/info', (req, res) => {
   )
 })
 
-app.get('/api/persons', (req, res) => {
-  res.json(persons)
+app.get('/api/persons', (req, response) => {
+    Person.find({}).then((persons) => {
+      response.json(persons.map((p) => p.toJSON()))
+    })
 })
 
 app.get('/api/persons/:id', (request, response) => {
@@ -110,7 +80,7 @@ app.post('/api/persons', (request, response) => {
   response.json(person)
 })
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
