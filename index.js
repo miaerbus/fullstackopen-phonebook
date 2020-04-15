@@ -18,7 +18,7 @@ app.use(logger)
 
 app.use(express.static('build'))
 
-app.get('/info', (req, res) => {
+app.get('/info', (req, res, next) => {
   const date = new Date()
 
   Person.find({})
