@@ -15,6 +15,8 @@ const logger = morgan(
 
 app.use(logger)
 
+app.use(express.static('build'))
+
 let persons = [
   {
     name: 'Arto Hellas',
